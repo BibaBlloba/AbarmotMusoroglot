@@ -1,3 +1,7 @@
 .venv
 __pycache__
 .env
+mock_audio.ogg
+temp.ogg
+temp.wav
+voice_message.ogg
