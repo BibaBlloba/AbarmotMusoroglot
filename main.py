@@ -28,10 +28,16 @@ def handle_voice_message(message):
 
     recognized_text = Services().recognize_from_audio_file("./temp.ogg")
 
-    if recognized_text is not None:
-        bot.reply_to(message, recognized_text)
-    else:
+    if recognized_text is None:
         bot.reply_to(message, "Нипоооон ¯\(°_o)/¯")
+
+    action = Services().process_command(recognized_text)
+    print(f"Определенная команда: {action}")
+    try:
+        result = Services().execute_action(command=action)
+    except:
+        print(result)
+        bot.reply_to(message, "Бро, что-то не так (ಠ_ಠ)")
 
 
 bot.polling(none_stop=True)
