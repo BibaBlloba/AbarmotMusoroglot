@@ -2,6 +2,8 @@ import speech_recognition as sr
 from pydub import AudioSegment
 from transformers import pipeline
 
+from services.createMail import CreateMail
+
 
 class Services:
     nlp = pipeline("zero-shot-classification")
@@ -20,6 +22,7 @@ class Services:
 
         if "создать почту" in prompt or "сделать почту" in prompt:
             print("\nСоздаю почту\n")
+            return CreateMail().create()
 
     def convert_ogg_to_wav(self, filename, new_filename):
         audio = AudioSegment.from_ogg(filename)
