@@ -2,7 +2,9 @@ import speech_recognition as sr
 from pydub import AudioSegment
 from transformers import pipeline
 
+from config import bot
 from services.createMail import CreateMail
+from services.Swearing import Swearing
 
 
 class Services:
@@ -12,17 +14,22 @@ class Services:
         candidate_labels = [
             "создать почту",
             "сделать почту",
+            "иди нахуй",
+            "пошел нахуй",
         ]
         result = self.nlp(command, candidate_labels)
         return result
 
-    def execute_action(self, command):
+    def execute_action(self, command, message):
 
         prompt: str = command.get("labels")[0]
 
+        if "иди нахуй" in prompt or "пошел нахуй" in prompt:
+            print("\nИду нахуй\n")
+            return Swearing().naxui(message)
+
         if "создать почту" in prompt or "сделать почту" in prompt:
             print("\nСоздаю почту\n")
-            return CreateMail().create()
 
     def convert_ogg_to_wav(self, filename, new_filename):
         audio = AudioSegment.from_ogg(filename)

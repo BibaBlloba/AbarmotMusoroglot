@@ -1,9 +1,7 @@
 import telebot
 
-from config import settings
+from config import bot, settings
 from services.base import Services
-
-bot = telebot.TeleBot(settings.BOT_API)
 
 
 @bot.message_handler(content_types=["text"])
@@ -11,9 +9,14 @@ def handle_text_message(message):
     action = Services().process_command(message.text)
     print(f"Определенная команда: {action}")
     try:
-        result = Services().execute_action(command=action)
+        result = Services().execute_action(command=action, message=message)
     except:
         bot.reply_to(message, "Бро, что-то не так (ಠ_ಠ)")
+
+
+@bot.message_handler(content_types=["sticker"])
+def handle_sticker_message(message):
+    print(f"Sticker ID: {message.sticker.file_id}")
 
 
 @bot.message_handler(content_types=["voice"])
@@ -42,7 +45,7 @@ def handle_voice_message(message):
     action = Services().process_command(recognized_text)
     print(f"Определенная команда: {action}")
     try:
-        result = Services().execute_action(command=action)
+        result = Services().execute_action(command=action, message=message)
     except:
         bot.reply_to(message, "Бро, что-то не так (ಠ_ಠ)")
 
